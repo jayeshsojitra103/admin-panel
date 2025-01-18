@@ -25,7 +25,7 @@ import { CalendarIcon, RefreshCcw } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useActivityLogs } from "@/hooks/useActivityLogs";
 import { Loader } from "@/components/Loader";
-import { Pagination } from "@/components/pagination";
+import { Pagination } from "@/components/Pagination";
 
 const ActivityLogs = () => {
   const {
