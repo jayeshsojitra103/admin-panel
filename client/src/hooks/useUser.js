@@ -10,7 +10,9 @@ import { format } from "date-fns";
 
 export const useUser = () => {
   const dispatch = useDispatch();
-  const { users, loading, filters } = useSelector((state) => state.users);
+  const { users, loading, filters, currentPage, totalPages } = useSelector(
+    (state) => state.users
+  );
 
   const [searchTerm, setSearchTerm] = useState("");
   const [, setDebouncedSearchTerm] = useState(""); // For debounced value
@@ -23,10 +25,11 @@ export const useUser = () => {
     to: filters.endDate ? new Date(filters.endDate) : null,
   });
 
-  // Fetch users based on the debounced search term
+  // Fetch users based on the debounced search term and current page
   useEffect(() => {
-    dispatch(fetchUsers(filters));
-  }, [dispatch, filters]);
+    console.log("...filters, page: currentPage", filters, currentPage);
+    dispatch(fetchUsers({ ...filters }));
+  }, [dispatch, filters, currentPage]);
 
   useEffect(() => {
     setFilteredUsers(users);
@@ -80,6 +83,10 @@ export const useUser = () => {
     }
   };
 
+  const handlePageChange = (newPage) => {
+    dispatch(setFilters({ page: newPage }));
+  };
+
   return {
     filteredUsers,
     handleAction,
@@ -94,5 +101,8 @@ export const useUser = () => {
     handleDateSelect,
     date,
     filters,
+    currentPage,
+    totalPages,
+    handlePageChange,
   };
 };

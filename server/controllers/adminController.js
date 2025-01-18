@@ -4,7 +4,15 @@ const userController = {
   // Get all users with optional filters
   async getUsers(req, res) {
     try {
-      const { status, role, search, startDate, endDate } = req.query;
+      const {
+        status,
+        role,
+        search,
+        startDate,
+        endDate,
+        page = 1,
+        limit = 10,
+      } = req.query;
       const query = { role: { $ne: "admin" } }; // Exclude users with role "admin"
 
       if (status) query.status = status;
@@ -23,17 +31,33 @@ const userController = {
         };
       }
 
-      const users = await User.find(query)
-        .select("-password")
-        .sort({ date: -1 }); // Sort by most recent users
+      const options = {
+        sort: { date: -1 },
+        limit: parseInt(limit),
+        skip: (parseInt(page) - 1) * parseInt(limit),
+        select: "-password",
+      };
 
-      res.json(users);
+      const [users, total] = await Promise.all([
+        User.find(query, null, options),
+        User.countDocuments(query),
+      ]);
+
+      const totalPages = Math.ceil(total / limit);
+
+      res.json({
+        users,
+        currentPage: parseInt(page),
+        totalPages,
+        totalUsers: total,
+      });
     } catch (error) {
       res
         .status(500)
         .json({ message: "Error fetching users", error: error.message });
     }
   },
+
   // Approve a pending user
   async approveUser(req, res) {
     try {

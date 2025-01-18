@@ -26,6 +26,7 @@ import { format } from "date-fns";
 import { PopoverContent } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { Loader } from "@/components/Loader";
+import { Pagination } from "@/components/Pagination";
 
 const Users = () => {
   const {
@@ -41,6 +42,9 @@ const Users = () => {
     selectedUser,
     handleDateSelect,
     date,
+    currentPage,
+    totalPages,
+    handlePageChange,
   } = useUser();
 
   return (
@@ -158,10 +162,15 @@ const Users = () => {
                   </TableCell>
                 </TableRow>
               )}
-
-              {}
             </TableBody>
           </Table>
+          <div className="mt-4 flex justify-center">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
         </CardContent>
       </Card>
 

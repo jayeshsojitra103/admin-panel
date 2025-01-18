@@ -45,7 +45,11 @@ const usersSlice = createSlice({
       search: "",
       startDate: null,
       endDate: null,
+      page: 1,
     },
+    currentPage: 1,
+    totalPages: 1,
+    totalUsers: 0,
   },
   reducers: {
     setFilters: (state, action) => {
@@ -59,8 +63,10 @@ const usersSlice = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload;
-        state.error = null;
+        state.users = action.payload.users;
+        state.currentPage = action.payload.currentPage;
+        state.totalPages = action.payload.totalPages;
+        state.totalUsers = action.payload.totalUsers;
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
