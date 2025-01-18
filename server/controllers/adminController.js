@@ -11,7 +11,7 @@ const userController = {
         startDate,
         endDate,
         page = 1,
-        limit = 10,
+        limit = 10000,
       } = req.query;
       const query = { role: { $ne: "admin" } }; // Exclude users with role "admin"
 

@@ -4,7 +4,7 @@ const analyticsController = {
   // Get analytics data
   async getAnalytics(req, res) {
     try {
-      const { startDate, endDate, page = 1, limit = 10 } = req.query;
+      const { startDate, endDate, page = 1, limit = 1000 } = req.query;
       const query = {};
 
       if (startDate && endDate) {

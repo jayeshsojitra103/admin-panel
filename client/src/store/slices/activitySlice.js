@@ -23,6 +23,7 @@ const activitySlice = createSlice({
       userId: null,
       actionType: null,
       page: 1,
+      limit: 10,
     },
     currentPage: 1,
     totalPages: 1,

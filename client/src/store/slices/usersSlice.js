@@ -46,6 +46,7 @@ const usersSlice = createSlice({
       startDate: null,
       endDate: null,
       page: 1,
+      limit: 10,
     },
     currentPage: 1,
     totalPages: 1,

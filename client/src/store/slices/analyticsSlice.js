@@ -24,8 +24,12 @@ const analyticsSlice = createSlice({
     loading: false,
     error: null,
     filters: {
-      startDate: null,
-      endDate: null,
+      filters: {
+        startDate: null,
+        endDate: null,
+        page: 1,
+        limit: 10,
+      },
     },
   },
   reducers: {
@@ -39,8 +43,13 @@ const analyticsSlice = createSlice({
         state.loading = true;
       })
       .addCase(fetchAnalytics.fulfilled, (state, action) => {
+        console.log(action.payload);
         state.loading = false;
-        state.data = action.payload;
+        state.data = action.payload.analytics;
+        state.currentPage = action.payload.currentPage;
+        state.totalAnalytics = action.payload.totalAnalytics;
+        state.totalPages = action.payload.totalPages;
+
         state.error = null;
       })
       .addCase(fetchAnalytics.rejected, (state, action) => {
