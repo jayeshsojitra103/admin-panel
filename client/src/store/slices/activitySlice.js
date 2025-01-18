@@ -22,7 +22,11 @@ const activitySlice = createSlice({
       endDate: null,
       userId: null,
       actionType: null,
+      page: 1,
     },
+    currentPage: 1,
+    totalPages: 1,
+    totalLogs: 0,
   },
   reducers: {
     setFilters: (state, action) => {
@@ -36,7 +40,10 @@ const activitySlice = createSlice({
       })
       .addCase(fetchActivityLogs.fulfilled, (state, action) => {
         state.loading = false;
-        state.logs = action.payload;
+        state.logs = action.payload.logs;
+        state.currentPage = action.payload.currentPage;
+        state.totalPages = action.payload.totalPages;
+        state.totalLogs = action.payload.totalLogs;
         state.error = null;
       })
       .addCase(fetchActivityLogs.rejected, (state, action) => {

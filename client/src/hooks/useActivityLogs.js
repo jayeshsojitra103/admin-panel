@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 export const useActivityLogs = () => {
   const dispatch = useDispatch();
-  const { logs, loading, filters } = useSelector((state) => state.activity);
+  const { logs, loading, filters, currentPage, totalPages } = useSelector(
+    (state) => state.activity
+  );
 
   const [date, setDate] = useState({
     from: filters.startDate ? new Date(filters.startDate) : null,
@@ -23,6 +25,7 @@ export const useActivityLogs = () => {
         setFilters({
           startDate: null,
           endDate: null,
+          page: 1,
         })
       );
     } else if (newDate?.from && newDate?.to) {
@@ -30,17 +33,22 @@ export const useActivityLogs = () => {
         setFilters({
           startDate: format(newDate.from, "yyyy-MM-dd"),
           endDate: newDate.to ? format(newDate.to, "yyyy-MM-dd") : null,
+          page: 1,
         })
       );
     }
   };
 
   const handleActionTypeChange = (value) => {
-    dispatch(setFilters({ action: value === "all" ? "" : value }));
+    dispatch(setFilters({ action: value === "all" ? "" : value, page: 1 }));
   };
 
   const handleRefresh = () => {
     dispatch(fetchActivityLogs(filters));
+  };
+
+  const handlePageChange = (newPage) => {
+    dispatch(setFilters({ page: newPage }));
   };
 
   const getActionBadgeColor = (actionType) => {
@@ -54,14 +62,18 @@ export const useActivityLogs = () => {
     };
     return colors[actionType] || colors.default;
   };
+
   return {
     handleRefresh,
     getActionBadgeColor,
     handleActionTypeChange,
     handleDateSelect,
+    handlePageChange,
     logs,
     loading,
     date,
     filters,
+    currentPage,
+    totalPages,
   };
 };

@@ -21,10 +21,11 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format } from "date-fns";
-import { Calendar as CalendarIcon, RefreshCcw } from "lucide-react";
+import { CalendarIcon, RefreshCcw } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useActivityLogs } from "@/hooks/useActivityLogs";
 import { Loader } from "@/components/Loader";
+import { Pagination } from "@/components/pagination";
 
 const ActivityLogs = () => {
   const {
@@ -32,10 +33,13 @@ const ActivityLogs = () => {
     getActionBadgeColor,
     handleActionTypeChange,
     handleDateSelect,
+    handlePageChange,
     logs,
     loading,
     date,
     filters,
+    currentPage,
+    totalPages,
   } = useActivityLogs();
 
   return (
@@ -160,6 +164,13 @@ const ActivityLogs = () => {
               })}
             </TableBody>
           </Table>
+          <div className="mt-4 flex justify-center">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+            />
+          </div>
         </CardContent>
       </Card>
       {loading && <Loader />}
