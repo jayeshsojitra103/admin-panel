@@ -12,7 +12,9 @@ app.use(express.json());
 
 // Connect to MongoDB
 connectDB();
-
+app.get("/", (req, res) => {
+  res.send("Server Running....");
+});
 // Routes
 app.use("/api/admin", adminRoutes);
 
