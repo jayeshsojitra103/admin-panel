@@ -4,7 +4,7 @@ const analyticsController = {
   // Get analytics data
   async getAnalytics(req, res) {
     try {
-      const { startDate, endDate } = req.query;
+      const { startDate, endDate, page = 1, limit = 10 } = req.query;
       const query = {};
 
       if (startDate && endDate) {
@@ -14,8 +14,25 @@ const analyticsController = {
         };
       }
 
-      const analytics = await Analytics.find(query).sort({ date: -1 });
-      res.json(analytics);
+      const options = {
+        sort: { date: -1 },
+        limit: parseInt(limit),
+        skip: (parseInt(page) - 1) * parseInt(limit),
+      };
+
+      const [analytics, total] = await Promise.all([
+        Analytics.find(query, null, options),
+        Analytics.countDocuments(query),
+      ]);
+
+      const totalPages = Math.ceil(total / limit);
+
+      res.json({
+        analytics,
+        currentPage: parseInt(page),
+        totalPages,
+        totalAnalytics: total,
+      });
     } catch (error) {
       res
         .status(500)
